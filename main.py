@@ -64,7 +64,7 @@ class RZSJabberBot(JabberBot):
 					return
 
 
-bc = RZSJabberBot(_jid, _jpw, debug=True)
+bc = RZSJabberBot(_jid, _jpw)
 
 th = threading.Thread( target = bc.thread_proc)
 bc.serve_forever( connect_callback = lambda: th.start())
