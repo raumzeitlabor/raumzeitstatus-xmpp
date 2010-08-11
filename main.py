@@ -41,6 +41,20 @@ class RZSJabberBot(JabberBot):
 		self.message_queue = []
 		self.thread_killed = False
 
+	@botcmd
+	def update(self):
+		try:
+			status = urllib.urlopen('http://status.raumzeitlabor.de/api/simple').read().strip()
+		except:
+			status = 'Abfrage fehlgeschlagen'
+		if status == '1':
+			self.setstatus('none', 'RaumZeitLabor ist geöffnet')
+		elif status == '0':
+			self.setstatus('away', 'RaumZeitLabor ist geschlossen')
+		else:
+			self.setstatus('dnd', 'Status unbekannt')
+		return 'Mein Status wurde aktualisiert. status.raumzeitlabor hat folgendes zurückgegeben: %s' % status
+
 	def setstatus(self, show, status=None):
 		pres = xmpp.Presence()
 		pres.setShow(show)
@@ -50,8 +64,10 @@ class RZSJabberBot(JabberBot):
 		
 	def thread_proc(self):
 		while not self.thread_killed:
-			status = urllib.urlopen('http://status.raumzeitlabor.de/api/simple').read().strip()
-			
+			try:
+				status = urllib.urlopen('http://status.raumzeitlabor.de/api/simple').read().strip()
+			except:
+				status == '?'
 			if status == '1':
 				self.setstatus('none', 'RaumZeitLabor ist geöffnet')
 			elif status == '0':
