@@ -42,7 +42,7 @@ class RZSJabberBot(JabberBot):
 		self.thread_killed = False
 
 	@botcmd
-	def update(self):
+	def update(self, mess, args):
 		try:
 			status = urllib.urlopen('http://status.raumzeitlabor.de/api/simple').read().strip()
 		except:
